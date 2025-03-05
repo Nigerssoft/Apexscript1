@@ -1,5 +1,6 @@
 print("Hello Apex Script Subscribe Telegram t.me/Apex_Script")
 
+-- Функция для создания меню
 local function createMenu()
     -- Создаем ScreenGui в PlayerGui
     local screenGui = Instance.new("ScreenGui")
@@ -7,8 +8,8 @@ local function createMenu()
     screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
     local mainFrame = Instance.new("Frame")
-    mainFrame.Size = UDim2.new(0, 150, 0, 120) -- Уменьшил размер для вертикального расположения
-    mainFrame.Position = UDim2.new(0.5, -75, 0.5, -60)
+    mainFrame.Size = UDim2.new(0, 150, 0, 160) -- Увеличил высоту для новых функций
+    mainFrame.Position = UDim2.new(0.5, -75, 0.5, -80)
     mainFrame.BackgroundColor3 = Color3.new(0.1, 0.1, 0.1)
     mainFrame.BorderSizePixel = 0
     mainFrame.Active = true -- Позволяет фрейму быть активным
@@ -57,6 +58,7 @@ local function createMenu()
         openButton.Visible = false -- Скрываем круг
     end)
 
+    -- Функция для изменения скорости игрока
     local function setSpeed(value)
         local character = game.Players.LocalPlayer.Character
         if character then
@@ -67,6 +69,7 @@ local function createMenu()
         end
     end
 
+    -- Чекбокс для скорости
     local speedCheckbox = Instance.new("TextButton")
     speedCheckbox.Text = "☐ Speed 50"
     speedCheckbox.Size = UDim2.new(0.8, 0, 0, 20)
@@ -84,6 +87,7 @@ local function createMenu()
         speedCheckbox.Text = speedEnabled and "☑ Speed 50" or "☐ Speed 50"
     end)
 
+    -- Функция для создания ESP
     local function createESP(player)
         local character = player.Character
         if not character then return end
@@ -106,6 +110,7 @@ local function createMenu()
         end)
     end
 
+    -- Функция для активации/деактивации ESP
     local function toggleESP(activated)
         if activated then
             -- Применяем ESP ко всем игрокам
@@ -130,6 +135,7 @@ local function createMenu()
         end
     end
 
+    -- Чекбокс для ESP
     local espCheckbox = Instance.new("TextButton")
     espCheckbox.Text = "☐ ESP"
     espCheckbox.Size = UDim2.new(0.8, 0, 0, 20)
@@ -146,30 +152,105 @@ local function createMenu()
         toggleESP(espEnabled)
         espCheckbox.Text = espEnabled and "☑ ESP" or "☐ ESP"
     end)
+
+    -- Функция для Fly
+    local flyEnabled = false
+    local flySpeed = 50
+    local bodyVelocity
+
+    local function toggleFly()
+        flyEnabled = not flyEnabled
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            if flyEnabled then
+                bodyVelocity = Instance.new("BodyVelocity")
+                bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+                bodyVelocity.MaxForce = Vector3.new(0, 0, 0) + Vector3.new(1, 1, 1) * 10000
+                bodyVelocity.Parent = character.HumanoidRootPart
+            else
+                if bodyVelocity then
+                    bodyVelocity:Destroy()
+                end
+            end
+        end
+    end
+
+    -- Чекбокс для Fly
+    local flyCheckbox = Instance.new("TextButton")
+    flyCheckbox.Text = "☐ Fly"
+    flyCheckbox.Size = UDim2.new(0.8, 0, 0, 20)
+    flyCheckbox.Position = UDim2.new(0.1, 0, 0.7, 0)
+    flyCheckbox.BackgroundTransparency = 1 -- Прозрачный фон
+    flyCheckbox.TextColor3 = Color3.new(1, 1, 1) -- Белый текст
+    flyCheckbox.Font = Enum.Font.SourceSans
+    flyCheckbox.TextSize = 14
+    flyCheckbox.Parent = mainFrame
+
+    flyCheckbox.MouseButton1Click:Connect(function()
+        flyEnabled = not flyEnabled
+        toggleFly()
+        flyCheckbox.Text = flyEnabled and "☑ Fly" or "☐ Fly"
+    end)
+
+    -- Функция для Noclip
+    local noclipEnabled = false
+    local noclipConnection
+
+    local function toggleNoclip()
+        noclipEnabled = not noclipEnabled
+        local character = game.Players.LocalPlayer.Character
+        if character then
+            if noclipEnabled then
+                noclipConnection = game:GetService("RunService").Stepped:Connect(function()
+                    for _, part in pairs(character:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.CanCollide = false
+                        end
+                    end
+                end)
+            else
+                if noclipConnection then
+                    noclipConnection:Disconnect()
+                end
+            end
+        end
+    end
+
+    -- Чекбокс для Noclip
+    local noclipCheckbox = Instance.new("TextButton")
+    noclipCheckbox.Text = "☐ Noclip"
+    noclipCheckbox.Size = UDim2.new(0.8, 0, 0, 20)
+    noclipCheckbox.Position = UDim2.new(0.1, 0, 0.9, 0)
+    noclipCheckbox.BackgroundTransparency = 1 -- Прозрачный фон
+    noclipCheckbox.TextColor3 = Color3.new(1, 1, 1) -- Белый текст
+    noclipCheckbox.Font = Enum.Font.SourceSans
+    noclipCheckbox.TextSize = 14
+    noclipCheckbox.Parent = mainFrame
+
+    noclipCheckbox.MouseButton1Click:Connect(function()
+        noclipEnabled = not noclipEnabled
+        toggleNoclip()
+        noclipCheckbox.Text = noclipEnabled and "☑ Noclip" or "☐ Noclip"
+    end)
 end
 
+-- Восстановление меню после смерти
 local function restoreMenu()
-    -- Убедимся, что PlayerGui загружен
     local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-    -- Если меню уже существует, удалим его
     if playerGui:FindFirstChild("ApexMenu") then
         playerGui.ApexMenu:Destroy()
     end
-
-    -- Создаем новое меню
     createMenu()
 end
 
 game.Players.LocalPlayer.CharacterAdded:Connect(restoreMenu)
 
+-- Функция для ввода ключа
 local function askForKey()
-    -- Создаем ScreenGui для ввода ключа
     local keyGui = Instance.new("ScreenGui")
     keyGui.Name = "KeyGui"
     keyGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-    -- Основной фрейм для ввода ключа
     local keyFrame = Instance.new("Frame")
     keyFrame.Size = UDim2.new(0, 300, 0, 150)
     keyFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
@@ -197,7 +278,6 @@ local function askForKey()
     keyBox.PlaceholderText = "Введите ключ..."
     keyBox.Parent = keyFrame
 
-    -- Кнопка для подтверждения ключа
     local submitButton = Instance.new("TextButton")
     submitButton.Text = "Подтвердить"
     submitButton.Size = UDim2.new(0.8, 0, 0, 30)
@@ -208,11 +288,10 @@ local function askForKey()
     submitButton.TextSize = 16
     submitButton.Parent = keyFrame
 
-    -- Обработка ввода ключа
     submitButton.MouseButton1Click:Connect(function()
         if keyBox.Text == "t.me/Apex_Script" then
-            keyGui:Destroy() 
-            createMenu() 
+            keyGui:Destroy()
+            createMenu()
         else
             keyBox.Text = "NO WORK KEY"
         end
