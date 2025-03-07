@@ -72,7 +72,7 @@ local function createMenu()
     local speedCheckbox = Instance.new("TextButton")
     speedCheckbox.Text = "☐ Speed 50"
     speedCheckbox.Size = UDim2.new(0.8, 0, 0, 20)
-    speedCheckbox.Position = UDim2.new(0.1, 0, 0.1, 0) -- Перемещено вверх
+    speedCheckbox.Position = UDim2.new(0.1, 0, 0.1, 0)
     speedCheckbox.BackgroundTransparency = 1 -- Прозрачный фон
     speedCheckbox.TextColor3 = Color3.new(1, 1, 1) -- Белый текст
     speedCheckbox.Font = Enum.Font.SourceSans
@@ -138,7 +138,7 @@ local function createMenu()
     local espCheckbox = Instance.new("TextButton")
     espCheckbox.Text = "☐ ESP"
     espCheckbox.Size = UDim2.new(0.8, 0, 0, 20)
-    espCheckbox.Position = UDim2.new(0.1, 0, 0.3, 0) -- Перемещено вверх
+    espCheckbox.Position = UDim2.new(0.1, 0, 0.3, 0)
     espCheckbox.BackgroundTransparency = 1 -- Прозрачный фон
     espCheckbox.TextColor3 = Color3.new(1, 1, 1) -- Белый текст
     espCheckbox.Font = Enum.Font.SourceSans
@@ -178,7 +178,7 @@ local function createMenu()
     local flyCheckbox = Instance.new("TextButton")
     flyCheckbox.Text = "☐ Fly"
     flyCheckbox.Size = UDim2.new(0.8, 0, 0, 20)
-    flyCheckbox.Position = UDim2.new(0.1, 0, 0.5, 0) -- Перемещено вверх
+    flyCheckbox.Position = UDim2.new(0.1, 0, 0.5, 0)
     flyCheckbox.BackgroundTransparency = 1 -- Прозрачный фон
     flyCheckbox.TextColor3 = Color3.new(1, 1, 1) -- Белый текст
     flyCheckbox.Font = Enum.Font.SourceSans
@@ -219,7 +219,7 @@ local function createMenu()
     local noclipCheckbox = Instance.new("TextButton")
     noclipCheckbox.Text = "☐ Noclip"
     noclipCheckbox.Size = UDim2.new(0.8, 0, 0, 20)
-    noclipCheckbox.Position = UDim2.new(0.1, 0, 0.7, 0) -- Перемещено вверх
+    noclipCheckbox.Position = UDim2.new(0.1, 0, 0.7, 0)
     noclipCheckbox.BackgroundTransparency = 1 -- Прозрачный фон
     noclipCheckbox.TextColor3 = Color3.new(1, 1, 1) -- Белый текст
     noclipCheckbox.Font = Enum.Font.SourceSans
