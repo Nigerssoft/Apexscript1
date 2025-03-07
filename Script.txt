@@ -1,6 +1,5 @@
 print("Hello Apex Script Subscribe Telegram t.me/Apex_Script")
 
--- Функция для создания меню
 local function createMenu()
     -- Создаем ScreenGui в PlayerGui
     local screenGui = Instance.new("ScreenGui")
@@ -8,13 +7,13 @@ local function createMenu()
     screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
     local mainFrame = Instance.new("Frame")
-    mainFrame.Size = UDim2.new(0, 150, 0, 160) -- Увеличил высоту для новых функций
+    mainFrame.Size = UDim2.new(0, 150, 0, 160)
     mainFrame.Position = UDim2.new(0.5, -75, 0.5, -80)
     mainFrame.BackgroundColor3 = Color3.new(0.1, 0.1, 0.1)
     mainFrame.BorderSizePixel = 0
-    mainFrame.Active = true -- Позволяет фрейму быть активным
-    mainFrame.Draggable = true -- Позволяет двигать фрейм
-    mainFrame.Visible = true -- Меню изначально видимо
+    mainFrame.Active = true 
+    mainFrame.Draggable = true
+    mainFrame.Visible = true 
     mainFrame.Parent = screenGui
 
     local title = Instance.new("TextLabel")
@@ -259,7 +258,7 @@ local function askForKey()
     keyFrame.Parent = keyGui
 
     local title = Instance.new("TextLabel")
-    title.Text = "Введите ключ"
+    title.Text = "KEY APEX"
     title.Size = UDim2.new(1, 0, 0, 30)
     title.Position = UDim2.new(0, 0, 0, 10)
     title.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
@@ -275,11 +274,11 @@ local function askForKey()
     keyBox.TextColor3 = Color3.new(1, 1, 1)
     keyBox.Font = Enum.Font.SourceSans
     keyBox.TextSize = 16
-    keyBox.PlaceholderText = "Введите ключ..."
+    keyBox.PlaceholderText = "KEY APEX"
     keyBox.Parent = keyFrame
 
     local submitButton = Instance.new("TextButton")
-    submitButton.Text = "Подтвердить"
+    submitButton.Text = "Log In"
     submitButton.Size = UDim2.new(0.8, 0, 0, 30)
     submitButton.Position = UDim2.new(0.1, 0, 0.7, 0)
     submitButton.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
