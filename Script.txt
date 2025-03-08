@@ -1,21 +1,20 @@
-print("Hello Apex Hub")
-
 -- Generated using RoadToGlory's Converter v1.1 (RoadToGlory#9879)
 
 -- Instances:
 
 local Converted = {
-	["_ScreenGui"] = Instance.new("ScreenGui");
-	["_Frame"] = Instance.new("Frame");
-	["_TextLabel"] = Instance.new("TextLabel");
-	["_LocalScript"] = Instance.new("LocalScript");
-	["_infinite yield"] = Instance.new("TextButton");
-	["_Locals"] = Instance.new("LocalScript");
-	["_UICorner"] = Instance.new("UICorner");
-	["_UIStroke"] = Instance.new("UIStroke");
-	["_TextButton"] = Instance.new("TextButton");
-	["_LocalScript1"] = Instance.new("LocalScript");
-	["_TextButton1"] = Instance.new("TextButton");
+	["_ScreenGui"] = Instance.new("ScreenGui"),
+	["_Frame"] = Instance.new("Frame"),
+	["_TextLabel"] = Instance.new("TextLabel"),
+	["_LocalScript"] = Instance.new("LocalScript"),
+	["_infinite yield"] = Instance.new("TextButton"),
+	["_Locals"] = Instance.new("LocalScript"),
+	["_UICorner"] = Instance.new("UICorner"),
+	["_UIStroke"] = Instance.new("UIStroke"),
+	["_TextButton"] = Instance.new("TextButton"),
+	["_LocalScript1"] = Instance.new("LocalScript"),
+	["_TextButton1"] = Instance.new("TextButton"),
+	["_LocalScript2"] = Instance.new("LocalScript"),
 }
 
 -- Properties:
@@ -23,7 +22,7 @@ local Converted = {
 Converted["_ScreenGui"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 Converted["_ScreenGui"].Parent = game:GetService("CoreGui")
 
-Converted["_Frame"].BackgroundColor3 = Color3.fromRGB(45.00000111758709, 45.00000111758709, 45.00000111758709)
+Converted["_Frame"].BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 Converted["_Frame"].BorderColor3 = Color3.fromRGB(0, 0, 0)
 Converted["_Frame"].BorderSizePixel = 0
 Converted["_Frame"].Position = UDim2.new(0.0396363921, 0, 0.219010606, 0)
@@ -34,7 +33,7 @@ Converted["_TextLabel"].Font = Enum.Font.SourceSans
 Converted["_TextLabel"].Text = "APEX HUB"
 Converted["_TextLabel"].TextColor3 = Color3.fromRGB(255, 255, 255)
 Converted["_TextLabel"].TextSize = 14
-Converted["_TextLabel"].BackgroundColor3 = Color3.fromRGB(50.00000461935997, 50.00000461935997, 50.00000461935997)
+Converted["_TextLabel"].BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 Converted["_TextLabel"].BorderColor3 = Color3.fromRGB(0, 0, 0)
 Converted["_TextLabel"].BorderSizePixel = 0
 Converted["_TextLabel"].Position = UDim2.new(-9.17362044e-08, 0, 0, 0)
@@ -45,7 +44,7 @@ Converted["_infinite yield"].Font = Enum.Font.SourceSans
 Converted["_infinite yield"].Text = "infinite yield"
 Converted["_infinite yield"].TextColor3 = Color3.fromRGB(255, 255, 255)
 Converted["_infinite yield"].TextSize = 14
-Converted["_infinite yield"].BackgroundColor3 = Color3.fromRGB(53.000004440546036, 53.000004440546036, 53.000004440546036)
+Converted["_infinite yield"].BackgroundColor3 = Color3.fromRGB(53, 53, 53)
 Converted["_infinite yield"].BorderColor3 = Color3.fromRGB(255, 255, 255)
 Converted["_infinite yield"].BorderSizePixel = 0
 Converted["_infinite yield"].Position = UDim2.new(0.0428134538, 0, 0.189944133, 0)
@@ -56,14 +55,14 @@ Converted["_infinite yield"].Parent = Converted["_Frame"]
 Converted["_UICorner"].CornerRadius = UDim.new(0, 10)
 Converted["_UICorner"].Parent = Converted["_Frame"]
 
-Converted["_UIStroke"].Color = Color3.fromRGB(97.00000941753387, 97.00000941753387, 97.00000941753387)
+Converted["_UIStroke"].Color = Color3.fromRGB(97, 97, 97)
 Converted["_UIStroke"].Parent = Converted["_Frame"]
 
 Converted["_TextButton"].Font = Enum.Font.SourceSans
 Converted["_TextButton"].Text = "Fly Gui"
 Converted["_TextButton"].TextColor3 = Color3.fromRGB(255, 255, 255)
 Converted["_TextButton"].TextSize = 14
-Converted["_TextButton"].BackgroundColor3 = Color3.fromRGB(53.000004440546036, 53.000004440546036, 53.000004440546036)
+Converted["_TextButton"].BackgroundColor3 = Color3.fromRGB(53, 53, 53)
 Converted["_TextButton"].BorderColor3 = Color3.fromRGB(255, 255, 255)
 Converted["_TextButton"].BorderSizePixel = 0
 Converted["_TextButton"].Position = UDim2.new(0.358728796, 0, 0.189944133, 0)
@@ -74,7 +73,7 @@ Converted["_TextButton1"].Font = Enum.Font.SourceSans
 Converted["_TextButton1"].Text = "Universal Aimbot"
 Converted["_TextButton1"].TextColor3 = Color3.fromRGB(255, 255, 255)
 Converted["_TextButton1"].TextSize = 14
-Converted["_TextButton1"].BackgroundColor3 = Color3.fromRGB(53.000004440546036, 53.000004440546036, 53.000004440546036)
+Converted["_TextButton1"].BackgroundColor3 = Color3.fromRGB(53, 53, 53)
 Converted["_TextButton1"].BorderColor3 = Color3.fromRGB(255, 255, 255)
 Converted["_TextButton1"].BorderSizePixel = 0
 Converted["_TextButton1"].Position = UDim2.new(0.653185189, 0, 0.189944133, 0)
@@ -85,10 +84,9 @@ Converted["_TextButton1"].Parent = Converted["_Frame"]
 
 local fake_module_scripts = {}
 
-
 -- Fake Local Scripts:
 
-local function FRBWCKH_fake_script() -- Fake Script: StarterGui.ScreenGui.Frame.LocalScript
+local function RRMYX_fake_script() -- Fake Script: StarterGui.ScreenGui.Frame.LocalScript
     local script = Instance.new("LocalScript")
     script.Name = "LocalScript"
     script.Parent = Converted["_Frame"]
@@ -101,10 +99,10 @@ local function FRBWCKH_fake_script() -- Fake Script: StarterGui.ScreenGui.Frame.
         return req(obj)
     end
 
-	print("Hello world!")
-	
+    print("Hello world!")
 end
-local function LSUSNF_fake_script() -- Fake Script: StarterGui.ScreenGui.Frame.infinite yield.Locals
+
+local function UPGTWNQ_fake_script() -- Fake Script: StarterGui.ScreenGui.Frame.infinite yield.Locals
     local script = Instance.new("LocalScript")
     script.Name = "Locals"
     script.Parent = Converted["_infinite yield"]
@@ -117,13 +115,14 @@ local function LSUSNF_fake_script() -- Fake Script: StarterGui.ScreenGui.Frame.i
         return req(obj)
     end
 
-	local button = script.Parent
-	
-	button.MouseButton1Click:Connect(function()
-		loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
-	end)
+    local button = script.Parent
+    
+    button.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
+    end)
 end
-local function OTBGK_fake_script() -- Fake Script: StarterGui.ScreenGui.Frame.TextButton.LocalScript
+
+local function HVUBELG_fake_script() -- Fake Script: StarterGui.ScreenGui.Frame.TextButton.LocalScript
     local script = Instance.new("LocalScript")
     script.Name = "LocalScript"
     script.Parent = Converted["_TextButton"]
@@ -136,13 +135,75 @@ local function OTBGK_fake_script() -- Fake Script: StarterGui.ScreenGui.Frame.Te
         return req(obj)
     end
 
-	local button = script.Parent
-	
-	button.MouseButton1Click:Connect(function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
-	end)
+    local button = script.Parent
+    
+    button.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+    end)
 end
 
-coroutine.wrap(FRBWCKH_fake_script)()
-coroutine.wrap(LSUSNF_fake_script)()
-coroutine.wrap(OTBGK_fake_script)()
+local function AAVPCG_fake_script() -- Fake Script: StarterGui.ScreenGui.Frame.TextButton.LocalScript
+    local script = Instance.new("LocalScript")
+    script.Name = "LocalScript"
+    script.Parent = Converted["_TextButton1"]
+    local req = require
+    local require = function(obj)
+        local fake = fake_module_scripts[obj]
+        if fake then
+            return fake()
+        end
+        return req(obj)
+    end
+
+    local button = script.Parent
+    
+    button.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Aimbot-FE-21875"))()
+    end)
+end
+
+-- Функция для перемещения Frame
+local function makeDraggable(frame)
+    local dragToggle = nil
+    local dragInput = nil
+    local dragStart = nil
+    local startPos = nil
+
+    local function updateInput(input)
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+
+    frame.InputBegan:Connect(function(input)
+        if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+            dragToggle = true
+            dragStart = input.Position
+            startPos = frame.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragToggle = false
+                end
+            end)
+        end
+    end)
+
+    frame.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if input == dragInput and dragToggle then
+            updateInput(input)
+        end
+    end)
+end
+
+-- Делаем Frame перемещаемым
+makeDraggable(Converted["_Frame"])
+
+coroutine.wrap(RRMYX_fake_script)()
+coroutine.wrap(UPGTWNQ_fake_script)()
+coroutine.wrap(HVUBELG_fake_script)()
+coroutine.wrap(AAVPCG_fake_script)()
