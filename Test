@@ -1,0 +1,446 @@
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/VisualRoblox/Roblox/main/UI-Libraries/Visual%20UI%20Library/Source.lua'))()
+
+local Window = Library:CreateWindow('APEX', 'Survive the killer', 'by apex', 'rbxassetid://10618928818', false, 'VisualUIConfigs', 'Default')
+
+-- Функция для перемещения меню касанием
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+
+local function makeDraggable(frame)
+    local dragging = false
+    local dragInput, dragStart, startPos
+
+    -- Обработка начала касания
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    -- Обработка движения пальца
+    frame.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+
+    -- Обновление позиции меню
+    UserInputService.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            local delta = input.Position - dragStart
+            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+end
+
+-- Применяем функцию к главному окну
+makeDraggable(Window.Main)
+
+local Tab = Window:CreateTab('Main', true, 'rbxassetid://3926305904', Vector2.new(524, 44), Vector2.new(36, 36))
+
+local Section = Tab:CreateSection('Section')
+
+local Label = Section:CreateLabel('MAIN')
+
+local Paragraph = Section:CreateParagraph('Paragraph', 'Content')
+
+local autoTeleporting = false -- Выносим переменную за пределы функции
+local teleportConnection = nil
+
+local Button = Section:CreateButton('Auto Teleport - Kill', function()
+    autoTeleporting = not autoTeleporting -- Переключаем состояние
+    local RunService = game:GetService("RunService")
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+
+    local function autoTeleportToSurvivors()
+        if teleportConnection then
+            teleportConnection:Disconnect()
+            teleportConnection = nil
+        end
+        if autoTeleporting then
+            local lastTeleport = 0
+            teleportConnection = RunService.Heartbeat:Connect(function()
+                if not autoTeleporting then
+                    teleportConnection:Disconnect()
+                    teleportConnection = nil
+                    return
+                end
+                local currentTime = tick()
+                if currentTime - lastTeleport >= 1 then -- Задержка 1 секунда между телепортациями
+                    local survivors = {}
+                    for _, player in pairs(Players:GetPlayers()) do
+                        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                            local isKiller = player.Backpack:FindFirstChild("Knife") or player.Character:FindFirstChild("Knife")
+                            local isAlive = player.Character.Humanoid.Health > 0
+                            if not isKiller and isAlive then
+                                table.insert(survivors, player)
+                            end
+                        end
+                    end
+                    if #survivors > 0 then
+                        local randomSurvivor = survivors[math.random(1, #survivors)]
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = randomSurvivor.Character.HumanoidRootPart.CFrame
+                        lastTeleport = currentTime
+                    end
+                end
+            end)
+        else
+            if teleportConnection then
+                teleportConnection:Disconnect()
+                teleportConnection = nil
+            end
+        end
+    end
+
+    autoTeleportToSurvivors()
+    Library:CreateNotification('Auto Teleport', autoTeleporting and 'Enabled' or 'Disabled', 5)
+end)
+
+-- Слайдер для изменения FOV
+local Slider = Section:CreateSlider('Field of View', 1, 100, 50, Color3.fromRGB(0, 125, 255), function(Value)
+    -- Получаем камеру игры
+    local Camera = game.Workspace.CurrentCamera
+    -- Устанавливаем новое значение FOV
+    Camera.FieldOfView = Value
+end)
+
+local LocalPlayer = game.Players.LocalPlayer
+local killerColor = Color3.fromRGB(255, 0, 0) -- Цвет для убийцы
+
+-- Функция для создания ESP убийцы
+local function createKillerESP(player)
+    if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local isKiller = player.Backpack:FindFirstChild("Knife") or player.Character:FindFirstChild("Knife")
+        if isKiller then
+            local highlight = Instance.new("Highlight")
+            highlight.Name = "KillerESP"
+            highlight.FillColor = killerColor
+            highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+            highlight.FillTransparency = 0.5
+            highlight.OutlineTransparency = 0
+            highlight.Adornee = player.Character
+            highlight.Parent = player.Character
+        end
+    end
+end
+
+-- Функция для удаления ESP убийцы
+local function removeKillerESP(player)
+    if player.Character and player.Character:FindFirstChild("KillerESP") then
+        player.Character.KillerESP:Destroy()
+    end
+end
+
+-- Переключатель для Killer ESP
+local Toggle = Section:CreateToggle('Esp Killer', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+    if Value then
+        for _, player in pairs(game.Players:GetPlayers()) do
+            createKillerESP(player)
+        end
+        Library:CreateNotification('Esp On', 'Killer ESP Enabled', 5) -- Уведомление о включении
+    else
+        for _, player in pairs(game.Players:GetPlayers()) do
+            removeKillerESP(player)
+        end
+        Library:CreateNotification('Esp Off', 'Killer ESP Disabled', 5) -- Уведомление о выключении
+    end
+end)
+
+local Colorpicker = Section:CreateColorpicker('Color Esp Killer', Color3.fromRGB(255, 0, 0), 0.25, function(Value)
+    killerColor = Value
+    if Toggle.Value then
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player.Character and player.Character:FindFirstChild("KillerESP") then
+                player.Character.KillerESP.FillColor = killerColor
+            end
+        end
+    end
+end)
+
+-- Обработка новых игроков
+game.Players.PlayerAdded:Connect(function(player)
+    if Toggle.Value then
+        createKillerESP(player)
+    end
+end)
+
+local survivorColor = Color3.fromRGB(0, 0, 255)
+
+local function createSurvivorESP(player)
+    if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local isKiller = player.Backpack:FindFirstChild("Knife") or player.Character:FindFirstChild("Knife")
+        if not isKiller then
+            local highlight = Instance.new("Highlight")
+            highlight.Name = "SurvivorESP"
+            highlight.FillColor = survivorColor
+            highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+            highlight.FillTransparency = 0.5
+            highlight.OutlineTransparency = 0
+            highlight.Adornee = player.Character
+            highlight.Parent = player.Character
+        end
+    end
+end
+
+local Toggle = Section:CreateToggle('Esp Survior', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+    if Value then
+        for _, player in pairs(game.Players:GetPlayers()) do
+            createSurvivorESP(player)
+        end
+        Library:CreateNotification('Esp On', 'Survivor ESP Enabled', 5) -- Уведомление о включении
+    else
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player.Character and player.Character:FindFirstChild("SurvivorESP") then
+                player.Character.SurvivorESP:Destroy()
+            end
+        end
+        Library:CreateNotification('Esp Off', 'Survivor ESP Disabled', 5) -- Уведомление о выключении
+    end
+end)
+
+game.Players.PlayerAdded:Connect(function(player)
+    if Toggle.Value then
+        createSurvivorESP(player)
+    end
+end)
+
+local Colorpicker = Section:CreateColorpicker('Color Esp Survior', Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+    survivorColor = Value
+    if Toggle.Value then
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player.Character and player.Character:FindFirstChild("SurvivorESP") then
+                player.Character.SurvivorESP.FillColor = survivorColor
+            end
+        end
+    end
+end)
+
+local Other = Tab:CreateSection('Other')
+
+local collectingLoot = false -- Состояние функции
+local lootConnection = nil
+
+-- Функция для поиска папки с лутом
+local function findLootSpawns()
+    -- Ищем папку с лутом в Workspace
+    local lootFolder = Workspace:FindFirstChild("LootSpawns") -- Замените на правильное название папки
+    if lootFolder then
+        print("Loot folder found:", lootFolder)
+        return lootFolder
+    else
+        warn("Loot folder not found!")
+        return nil
+    end
+end
+
+-- Функция для сбора лута
+local function collectLoot()
+    if lootConnection then
+        lootConnection:Disconnect()
+        lootConnection = nil
+    end
+    if collectingLoot then
+        lootConnection = RunService.Heartbeat:Connect(function()
+            if not collectingLoot then
+                lootConnection:Disconnect()
+                return
+            end
+
+            -- Находим папку с лутом
+            local lootSpawns = findLootSpawns()
+            if lootSpawns then
+                -- Перебираем все объекты лута
+                for _, loot in pairs(lootSpawns:GetChildren()) do
+                    -- Проверяем, есть ли у лута нужные компоненты
+                    local lootProxBlock = loot:FindFirstChild("LootProxBlock") -- Замените на правильное название
+                    if lootProxBlock and lootProxBlock:FindFirstChild("LootProximityPrompt") then
+                        -- Телепортируемся к луту
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = lootProxBlock.CFrame
+                        wait(0.5) -- Ждем, чтобы игрок успел подойти
+                        -- Активируем лут
+                        fireproximityprompt(lootProxBlock.LootProximityPrompt)
+                        wait(0.5) -- Ждем, чтобы лут успел собраться
+                    end
+                end
+            end
+        end)
+    else
+        if lootConnection then
+            lootConnection:Disconnect()
+            lootConnection = nil
+        end
+    end
+end
+
+-- Переключатель для Auto Loot
+local Toggle = Other:CreateToggle('Auto Collect Loot', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+    collectingLoot = Value -- Включаем или выключаем функцию
+    collectLoot()
+    -- Уведомление о включении или выключении
+    if Value then
+        Library:CreateNotification('Auto Collect Loot', 'Enabled', 5)
+    else
+        Library:CreateNotification('Auto Collect Loot', 'Disabled', 5)
+    end
+end)
+
+local autoKillerSafety = false -- Состояние функции
+local safetyConnection = nil
+
+local Toggle = Other:CreateToggle('Auto Killer Safety', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+    autoKillerSafety = Value -- Включаем или выключаем функцию
+    local RunService = game:GetService("RunService")
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+
+    local function moveAwayFromKiller(killerPosition)
+        -- Получаем текущую позицию игрока
+        local playerPosition = LocalPlayer.Character.HumanoidRootPart.Position
+        -- Вычисляем направление от убийцы к игроку
+        local direction = (playerPosition - killerPosition).Unit
+        -- Задаем расстояние, на которое нужно отойти
+        local distance = 50 -- Расстояние в studs
+        -- Вычисляем новую позицию
+        local newPosition = playerPosition + (direction * distance)
+        -- Убеждаемся, что новая позиция находится в пределах карты
+        -- (можно добавить дополнительные проверки, если карта имеет ограничения)
+        return newPosition
+    end
+
+    if autoKillerSafety then
+        safetyConnection = RunService.Heartbeat:Connect(function()
+            if not autoKillerSafety then
+                safetyConnection:Disconnect()
+                safetyConnection = nil
+                return
+            end
+
+            -- Проверяем всех игроков
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    local isKiller = player.Backpack:FindFirstChild("Knife") or player.Character:FindFirstChild("Knife")
+                    if isKiller then
+                        -- Вычисляем расстояние до убийцы
+                        local distance = (player.Character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                        if distance < 20 then -- Если убийца ближе 20 studs
+                            -- Телепортируемся подальше от убийцы
+                            local newPosition = moveAwayFromKiller(player.Character.HumanoidRootPart.Position)
+                            LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
+                            Library:CreateNotification('Auto Killer Safety', 'Moved away from killer!', 5)
+                            break
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        if safetyConnection then
+            safetyConnection:Disconnect()
+            safetyConnection = nil
+        end
+    end
+end)
+
+local LibraryFunctions = Window:CreateTab('Settings', false, 'rbxassetid://3926305904', Vector2.new(524, 44), Vector2.new(36, 36))
+
+local UIFunctions = LibraryFunctions:CreateSection('UI Functions')
+
+local DestroyButton = UIFunctions:CreateButton('Destroy UI', function()
+    Library:DestroyUI()
+end)
+
+local ToggleKeybind = UIFunctions:CreateKeybind('Toggle UI', 'E', function()
+    Library:ToggleUI()
+end)
+
+local TextboxKeybind = UIFunctions:CreateTextbox('Notification', 'Text', function(Value)
+    Library:CreateNotification('Notification', Value, 5)
+end)
+
+local TransparencySlider = UIFunctions:CreateSlider('Transparency', 0, 100, 0, Color3.fromRGB(0, 125, 255), function(Value)
+    Library:SetTransparency(Value / 100, true)
+end)
+
+local TextPromptButton = UIFunctions:CreateButton('Create Text Prompt', function()
+    Library:CreatePrompt('Text', 'Prompt Title', 'Prompt Text', 'Alright')
+end)
+
+local OneButtonPromptButton = UIFunctions:CreateButton('Create One Button Prompt', function()
+    Library:CreatePrompt('OneButton', 'Prompt Title', 'Prompt Text', {
+        'Alright',
+        function()
+            print('Prompt Button Pressed')
+        end
+    })
+end)
+
+local TwoButtonPromptButton = UIFunctions:CreateButton('Create Two Button Prompt', function()
+    Library:CreatePrompt('TwoButton', 'Prompt Title', 'Prompt Text', {
+        'Button 1',
+        function()
+            print('Button 1')
+        end,
+        'Button 2',
+        function()
+            print('Button 2')
+        end
+    })
+end)
+
+local ConfigSection = LibraryFunctions:CreateSection('Config')
+
+local ConfigNameString = ''
+local ConfigName = ConfigSection:CreateTextbox('Config Name', 'Input', function(Value)
+    ConfigNameString = Value
+end)
+
+local SaveConfigButton = ConfigSection:CreateButton('Save Config', function()
+    Library:SaveConfig(ConfigNameString)
+end)
+
+local SelectedConfig = ''
+local ConfigsDropdown = ConfigSection:CreateDropdown('Configs', Library:GetConfigs(), nil, 0.25, function(Value)
+    SelectedConfig = Value
+end)
+
+local DeleteConfigButton = ConfigSection:CreateButton('Delete Config', function()
+    Library:DeleteConfig(SelectedConfig)
+end)
+
+local LoadConfigButton = ConfigSection:CreateButton('Load Config', function()
+    Library:LoadConfig(SelectedConfig)
+end)
+
+local RefreshConfigsButton = ConfigSection:CreateButton('Refresh', function()
+    ConfigsDropdown:UpdateDropdown(Library:GetConfigs())
+end)
+
+local ThemesSection = LibraryFunctions:CreateSection('Themes')
+
+local ThemesDropdown = ThemesSection:CreateDropdown('Themes', Library:GetThemes(), nil, 0.25, function(Value)
+    Library:ChangeTheme(Value)
+end)
+
+local ColorSection = LibraryFunctions:CreateSection('Custom Colors')
+
+for Index, CurrentColor in next, Library:ReturnTheme() do
+    ColorSection:CreateColorpicker(Index, CurrentColor, 0.25, function(Color)
+        Library:ChangeColor(Index, Color)
+    end, {true})
+end
+
+local CreditsTab = Window:CreateTab('Credits', false, 'rbxassetid://3926305904', Vector2.new(524, 44), Vector2.new(36, 36))
+
+local CreditsSection = CreditsTab:CreateSection('Credits')
+
+local Label = CreditsSection:CreateLabel('DEVELOPER - TG @Apex_cod')
+
+local Label = CreditsSection:CreateLabel('Telegram Channel - https://t.me/Apex_Script')
